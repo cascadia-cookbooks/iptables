@@ -1,5 +1,5 @@
 # iptables Cookbook
-This cookbook will install and configure iptables. This cookbook only supports Ubuntu 14.04 and 16.04.
+This cookbook will install and configure iptables for *IPv4*. This cookbook only supports Ubuntu 14.04 and 16.04.
 
 ## Requirements
 ### Platforms
@@ -9,14 +9,44 @@ This cookbook will install and configure iptables. This cookbook only supports U
 ### Chef
 - Chef '>= 12.5'
 
-### Cookbooks
-- apt
-
 ## Attributes
-TBD
+You can set custom rules via the `rules` attribute. The default rule will allow
+all traffic on the `eth0` interface, which is usually the LAN interface.
+
+```ruby
+# attributes/default.rb
+default['iptables']['rules'] = [
+    '-A INPUT -i eth0 -j ACCEPT',
+]
+```
 
 ## Usage
-TDB
+Here's an example `iptables` role that will install and configure iptables.
+
+Including it in the run list ensures that iptables is installed. Overriding the
+rules attribute will merge your custom rules with the cookbook defaults. In this
+example we're allowing traffic over port `22/tcp` and `80/tcp` on the `eth1`
+interface.
+
+You can get a list of interfaces by using the `$ ifconfig` command on your host.
+
+```ruby
+name 'iptables'
+description 'iptables'
+
+override_attributes(
+    'iptables' => {
+        'rules' => [
+            '-A INPUT -i eth1 -p tcp -m tcp --dport 22 -j ACCEPT',
+            '-A INPUT -i eth1 -p tcp -m tcp --dport 80 -j ACCEPT',
+        ]
+    }
+)
+
+run_list(
+    'recipe[cop_iptables::default]'
+)
+```
 
 ## Testing
 * http://kitchen.ci
