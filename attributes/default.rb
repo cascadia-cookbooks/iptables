@@ -4,7 +4,6 @@ default['iptables']['rules_ipv4'] = '/etc/iptables/rules.v4'
 default['iptables']['rules_ipv6'] = '/etc/iptables/rules.v6'
 
 default['iptables']['rules'] = [
-    '-A INPUT -i eth0 -j ACCEPT',
 ]
 
 # latest stable package release
