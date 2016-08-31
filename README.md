@@ -10,23 +10,17 @@ This cookbook will install and configure iptables for **IPv4**. This cookbook on
 - Chef '>= 12.5'
 
 ## Attributes
-You can set custom rules via the `rules` attribute. The default rule will allow
-all traffic on the `eth0` interface, which is usually the LAN interface.
+You can set custom rules via the `rules` attribute.
 
-```ruby
-# attributes/default.rb
-default['iptables']['rules'] = [
-    '-A INPUT -i eth0 -j ACCEPT',
-]
-```
+`default['iptables']['rules']`
 
 ## Usage
-Here's an example `iptables` role that will install and configure iptables.
+Here's an `iptables` role that will install and configure iptables.
 
-Including it in the run list ensures that iptables is installed. Overriding the
-rules attribute will merge your custom rules with the cookbook defaults. In this
-example we're allowing traffic over port `22/tcp` and `80/tcp` on the `eth1`
-interface.
+Including the `cop_iptables` cookbook in the run_list ensures that iptables will be installed.
+
+Use the `default['iptables']['rules']` attribute to merge your rules with the cookbook template. In this example the first rule will allow all traffic on the `eth0` interface, which is usually the LAN interface.
+The second and third rules are allowing traffic over port `22/tcp` and `80/tcp` on the `eth1` or WAN interface.
 
 You can get a list of interfaces by using the `$ ifconfig` command on your host.
 
@@ -37,6 +31,7 @@ description 'iptables'
 override_attributes(
     'iptables' => {
         'rules' => [
+            '-A INPUT -i eth0 -j ACCEPT',
             '-A INPUT -i eth1 -p tcp -m tcp --dport 22 -j ACCEPT',
             '-A INPUT -i eth1 -p tcp -m tcp --dport 80 -j ACCEPT',
         ]
