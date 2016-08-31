@@ -1,5 +1,5 @@
 # iptables Cookbook
-This cookbook will install and configure iptables for *IPv4*. This cookbook only supports Ubuntu 14.04 and 16.04.
+This cookbook will install and configure iptables for **IPv4**. This cookbook only supports Ubuntu 14.04 and 16.04.
 
 ## Requirements
 ### Platforms
@@ -52,16 +52,13 @@ run_list(
 * http://kitchen.ci
 * http://serverspec.org
 
-Testing is handled with ServerSpec, via Test Kitchen, which uses Docker to spin up VMs.
+Testing is handled with ServerSpec, via Test Kitchen, which uses Vagrant to spin up VMs.
 
 ServerSpec and Test Kitchen are bundled in the ChefDK package.
 
 ### Dependencies
 ```bash
 $ brew cask install chefdk
-$ chef gem install kitchen-docker
-$ brew install docker docker-machine
-$ docker-machine create default --driver virtualbox
 ```
 
 ### Running
