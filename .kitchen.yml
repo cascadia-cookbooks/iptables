@@ -1,0 +1,20 @@
+---
+driver:
+  name: docker
+  provision_command: curl -sL https://www.chef.io/chef/install.sh | bash; apt-get install net-tools
+
+platforms:
+- name: ubuntu-14.04
+  driver_config:
+    image: ubuntu:14.04
+    platform: ubuntu
+
+- name: ubuntu-16.04
+  driver_config:
+    image: ubuntu:16.04
+    platform: ubuntu
+
+suites:
+  - name: default
+    run_list:
+      - recipe[cop_iptables::default]
