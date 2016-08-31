@@ -11,5 +11,3 @@ issues_url 'https://github.com/copious-cookbooks/iptables/issues'
 
 supports 'ubuntu', '= 16.04'
 supports 'ubuntu', '= 14.04'
-
-depends 'apt'
