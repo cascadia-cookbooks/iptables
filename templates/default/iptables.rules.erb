@@ -39,10 +39,6 @@
 <%= rule %>
 <% end %>
 
-# accept anything from eth0
-# NOTE: this is all intra-cluster networking
-#-A INPUT -i eth0 -j ACCEPT
-
 # log and then drop anything else
 # NOTE: since we are dropping, not rejecting, anything not allowed will timeout
 -A INPUT -m limit --limit 5/min -j LOG --log-prefix "iptables denied: " --log-uid --log-level 7

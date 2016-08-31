@@ -8,7 +8,7 @@ default['iptables']['rules'] = [
 ]
 
 # latest stable package release
-case lsb[:release]
+case lsb['release']
 when '14.04'
     default['iptables']['version'] = '1.4.21-1ubuntu1'
 when '16.04'
