@@ -60,8 +60,7 @@ run_list(
 
 In this example these two rules are allowing any traffic over port `22/tcp` and `80/tcp` on all interfaces.
 
-You can find a list of ports by service
-[here](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers).
+Here's a list of ports by service https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers
 
 *NOTE*: Use these types of rules at the very least. However, it's better to
 lock things down by interfaces. See the next example.
@@ -82,11 +81,11 @@ which is usually the LAN interface. The second and third rules are allowing
 traffic over port `22/tcp` and `80/tcp` on the `eth1` or WAN interface.
 Interfaces can be different depending on which host you use.
 
-*NOTE*: You can get a list of interfaces by using the `$ ifconfig` command on your host.
+You can get a list of interfaces by using the `$ ifconfig` command on your host.
 
 *NOTE*: When you specify an interface with `-i <interface>`, that rule will only
 apply to that interface. You will need to think about how traffic is coming in
-and out of your network.
+and out of your network and on which interface.
 
 ```ruby
 override_attributes(
