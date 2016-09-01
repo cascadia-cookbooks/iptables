@@ -2,9 +2,10 @@
 This cookbook will install and configure iptables for **IPv4**. This cookbook
 only supports Ubuntu 14.04 and 16.04.
 
-**Warning**: Without setting appropriate iptable rules, this cookbook could lock
-you out by default. Ensure you can access the node after a Chef run by adding a
-rule to allow 22/tcp on all interfaces. See the first example under Usage.
+**Warning**: Without setting any iptable rules, this cookbook will fail by default.
+This is to prohibit iptables from locking us out.  Ensure you can access the node
+after a Chef run by adding a rule to allow 22/tcp on all interfaces. See the
+first example under Usage.
 
 ## Requirements
 ### Platforms
