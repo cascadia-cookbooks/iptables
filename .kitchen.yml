@@ -13,3 +13,4 @@ suites:
   - name: default
     run_list:
       - recipe[cop_iptables::default]
+    attributes: { iptables: { rules: [ '-A INPUT -j ACCEPT' ] } }
