@@ -2,11 +2,11 @@
 This cookbook will install and configure iptables for **IPv4**. This cookbook
 only supports Ubuntu 14.04 and 16.04.
 
-**Warning**: Without setting any iptable rules, this cookbook will fail by default.
+**WARNING**: Without setting any iptable rules, this cookbook will fail by default.
 This is to prohibit iptables from locking us out. Ensure you can access the node
 after a Chef run by adding some rules to use. See the first example under Usage.
 
-*NOTE:* The rules template for this cookbook does _not_ block outbound traffic.
+*NOTE*: The rules template for this cookbook does _not_ block outbound traffic.
 Only inbound. If you require blocking outbound traffic, you will need to create
 a rule for it.
 
@@ -38,7 +38,7 @@ your rules with the cookbook template.
 Here's a general `iptables` role that will install and configure iptables. It
 will also allow all traffic on all interfaces.
 
-**WARNING:** This is generally considered bad practice, you should be strict in what
+**WARNING**: This is generally considered bad practice, you should be strict in what
 is allowed and on which interface(s). See the next example.
 
 ```ruby
@@ -63,7 +63,7 @@ In this example these two rules are allowing any traffic over port `22/tcp` and 
 You can find a list of ports by service
 [here](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers).
 
-*NOTE:* Use these types of rules at the very least. However, it's better to
+*NOTE*: Use these types of rules at the very least. However, it's better to
 lock things down by interfaces. See the next example.
 
 ```ruby
@@ -82,9 +82,9 @@ which is usually the LAN interface. The second and third rules are allowing
 traffic over port `22/tcp` and `80/tcp` on the `eth1` or WAN interface.
 Interfaces can be different depending on which host you use.
 
-*NOTE:* You can get a list of interfaces by using the `$ ifconfig` command on your host.
+*NOTE*: You can get a list of interfaces by using the `$ ifconfig` command on your host.
 
-*NOTE:* When you specify an interface with `-i <interface>`, that rule will only
+*NOTE*: When you specify an interface with `-i <interface>`, that rule will only
 apply to that interface. You will need to think about how traffic is coming in
 and out of your network.
 
