@@ -6,6 +6,10 @@ only supports Ubuntu 14.04 and 16.04.
 This is to prohibit iptables from locking us out. Ensure you can access the node
 after a Chef run by adding some rules to use. See the first example under Usage.
 
+*NOTE:* The rules template for this cookbook does _not_ block outbound traffic.
+Only inbound. If you require blocking outbound traffic, you will need to create
+a rule for it.
+
 If you require further documentation:
 
 * http://ipset.netfilter.org/iptables.man.html
