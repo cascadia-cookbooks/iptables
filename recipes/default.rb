@@ -32,6 +32,11 @@ packages.each do |p|
     end
 end
 
+rules = node['iptables']['rules']
+# NOTE: abort chef run if rules doesnt exist or is an empty string, this is to prohibit
+# ourselves from being locked out of ssh access
+Chef::Application.fatal!("No iptable rules set, aborting Chef run to prohibit lockout.") unless rules && rules != ''
+
 template 'create iptables.rules' do
     path     '/etc/iptables/rules.v4'
     source   'iptables.rules.erb'
