@@ -59,7 +59,7 @@ In this example these two rules are allowing any traffic over port `22/tcp` and 
 You can find a list of ports by service
 [here](https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers).
 
-*NOTE:*: Use these types of rules at the very least. However, it's better to
+*NOTE:* Use these types of rules at the very least. However, it's better to
 lock things down by interfaces. See the next example.
 
 ```ruby
