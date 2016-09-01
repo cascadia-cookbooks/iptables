@@ -38,7 +38,7 @@ your rules with the cookbook template.
 Here's a general `iptables` role that will install and configure iptables. It
 will also allow all traffic on all interfaces.
 
-*WARNING:* This is generally considered bad practice, you should be strict in what
+**WARNING:** This is generally considered bad practice, you should be strict in what
 is allowed and on which interface(s). See the next example.
 
 ```ruby
