@@ -1,5 +1,10 @@
 # iptables Cookbook
-This cookbook will install and configure iptables for **IPv4**. This cookbook only supports Ubuntu 14.04 and 16.04.
+This cookbook will install and configure iptables for **IPv4**. This cookbook
+only supports Ubuntu 14.04 and 16.04.
+
+**Warning**: Without setting appropriate iptable rules, this cookbook could lock
+you out by default. Ensure you can access the node after a Chef run by adding a
+rule to allow 22/tcp on all interfaces. See the first example under Usage.
 
 ## Requirements
 ### Platforms
@@ -17,10 +22,13 @@ You can set custom rules via the `rules` attribute.
 ## Usage
 Here's an `iptables` role that will install and configure iptables.
 
-Including the `cop_iptables` cookbook in the run_list ensures that iptables will be installed.
+Including the `cop_iptables` cookbook in the run_list ensures that iptables
+will be installed. Use the `default['iptables']['rules']` attribute to merge
+your rules with the cookbook template.
 
-Use the `default['iptables']['rules']` attribute to merge your rules with the cookbook template. In this example the first rule will allow all traffic on the `eth0` interface, which is usually the LAN interface.
-The second and third rules are allowing traffic over port `22/tcp` and `80/tcp` on the `eth1` or WAN interface.
+In this example the first rule will allow all traffic on all interfaces. The
+second and third rules are allowing traffic over port `22/tcp` and `80/tcp` on
+all interfaces as well.
 
 You can get a list of interfaces by using the `$ ifconfig` command on your host.
 
@@ -31,15 +39,35 @@ description 'iptables'
 override_attributes(
     'iptables' => {
         'rules' => [
-            '-A INPUT -i eth0 -j ACCEPT',
-            '-A INPUT -i eth1 -p tcp -m tcp --dport 22 -j ACCEPT',
-            '-A INPUT -i eth1 -p tcp -m tcp --dport 80 -j ACCEPT',
+            '-A INPUT -j ACCEPT',
+            '-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT',
+            '-A INPUT -p tcp -m tcp --dport 80 -j ACCEPT',
         ]
     }
 )
 
 run_list(
     'recipe[cop_iptables::default]'
+)
+```
+
+In this example the first rule will allow all traffic on the `eth0` interface,
+which is usually the LAN interface. The second and third rules are allowing
+traffic over port `22/tcp` and `80/tcp` on the `eth1` or WAN interface.
+
+The lesson here is that if you specify an interface with `-i <interface`, that
+rule will only apply to that interface. You will need to think about how traffic
+is coming in and out of your network.
+
+```ruby
+override_attributes(
+    'iptables' => {
+        'rules' => [
+            '-A INPUT -i eth0 -j ACCEPT',
+            '-A INPUT -i eth1 -p tcp -m tcp --dport 22 -j ACCEPT',
+            '-A INPUT -i eth1 -p tcp -m tcp --dport 80 -j ACCEPT',
+        ]
+    }
 )
 ```
 
