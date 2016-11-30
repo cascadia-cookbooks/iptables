@@ -25,10 +25,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-packages = node['iptables']['packages']
-packages.each do |p|
+case node['platform_family']
+when 'fedora'
+    # NOTE: workaround for lack of Chef DNF provider on fedora >= 19
+    execute 'dnf install -y yum' do
+        command 'dnf install -y yum'
+        only_if 'test -f /usr/bin/dnf'
+        creates '/usr/bin/yum-deprecated'
+    end
+end
+
+node['iptables']['packages'].each do |p|
     package p do
-        action :install
+        # NOTE: upgrade whenever possible
+        action :upgrade
     end
 end
 
@@ -37,8 +47,8 @@ rules = node['iptables']['rules']
 # ourselves from being locked out of ssh access
 Chef::Application.fatal!("No iptable rules set, aborting Chef run to prohibit lockout.") unless rules && rules != ''
 
-template 'create iptables.rules' do
-    path     '/etc/iptables/rules.v4'
+template 'create iptables rules' do
+    path     node['iptables']['rule_file']
     source   'iptables.rules.erb'
     cookbook 'cop_iptables'
     group    'root'
@@ -48,8 +58,17 @@ template 'create iptables.rules' do
     action   :create
 end
 
-execute 'import rules' do
-    subscribes :run, 'template[create iptables.rules]', :immediately
-    command    'sudo iptables-restore < /etc/iptables/rules.v4'
+file '/etc/cron.d/iptables-restore' do
+    content "@reboot root iptables-restore < #{node['iptables']['rule_file']}"
+    group   'root'
+    owner   'root'
+    mode    0644
+    backup  false
+    action  :create
+end
+
+execute 'import iptable rules' do
+    subscribes :run, 'template[create iptables rules]', :immediately
+    command    "iptables-restore < #{node['iptables']['rule_file']}"
     action     :nothing
 end
