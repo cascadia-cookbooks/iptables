@@ -37,14 +37,7 @@ rules = node['iptables']['rules']
 # ourselves from being locked out of ssh access
 Chef::Application.fatal!("No iptable rules set, aborting Chef run to prohibit lockout.") unless rules && rules != ''
 
-directory '/etc/iptables/' do
-    user   'root'
-    group  'root'
-    mode   0755
-    action :create
-end
-
-template 'create iptables.rules' do
+template 'create iptables rules' do
     path     node['iptables']['rule_file']
     source   'iptables.rules.erb'
     cookbook 'cop_iptables'
@@ -55,7 +48,7 @@ template 'create iptables.rules' do
     action   :create
 end
 
-file '/etc/cron.d/iptables' do
+file '/etc/cron.d/iptables-restore' do
     content "@reboot root iptables-restore < #{node['iptables']['rule_file']}"
     group   'root'
     owner   'root'
@@ -64,11 +57,8 @@ file '/etc/cron.d/iptables' do
     action  :create
 end
 
-execute 'import rules' do
-    command "sudo iptables-restore < #{node['iptables']['rule_file']}"
-    action  :run
-end
-
-service node['iptables']['service'] do
-    action [:enable, :start]
+execute 'import iptable rules' do
+    subscribes :run, 'template[create iptables rules]', :immediately
+    command    "iptables-restore < #{node['iptables']['rule_file']}"
+    action     :nothing
 end
