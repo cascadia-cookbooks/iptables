@@ -1,6 +1,5 @@
 # iptables Cookbook
-This cookbook will install and configure iptables for **IPv4**. This cookbook
-only supports Ubuntu 14.04 and 16.04.
+This cookbook will install and configure iptables for **IPv4**.
 
 **WARNING**: Without setting any iptable rules, this cookbook will fail by default.
 This is to prohibit iptables from locking us out. Ensure you can access the node
@@ -19,8 +18,9 @@ If you require further documentation:
 
 ## Requirements
 ### Platforms
-- Ubuntu 14.04
-- Ubuntu 16.04
+- Ubuntu, Debian
+- CentOS, RHEL
+- Fedora
 
 ### Chef
 - Chef '>= 12.5'

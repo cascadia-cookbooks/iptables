@@ -1,4 +1,4 @@
-default['iptables']['packages']  = %w(iptables)
+default['iptables']['packages'] = %w(iptables)
 
 case node['platform_family']
 when 'debian'
