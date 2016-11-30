@@ -9,16 +9,19 @@ describe 'redis::default' do
     its(:stdout) { should match /1.(4|6).*/ }
   end
 
-  describe file('/etc/sysconfig/iptables'), :if => os[:platform_family] == 'rhel' do
-    it { should be_owned_by 'root' }
-    it { should be_grouped_into 'root' }
-    it { should be_mode '644' }
-  end
-
-  describe file('/etc/iptables/rules'), :if => os[:platform_family] == 'debian' do
-    it { should be_owned_by 'root' }
-    it { should be_grouped_into 'root' }
-    it { should be_mode '644' }
+  case os[:family]
+  when 'redhat', 'fedora'
+    describe file('/etc/sysconfig/iptables') do
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'root' }
+      it { should be_mode '644' }
+    end
+  when 'ubuntu', 'debian'
+    describe file('/etc/iptables/rules.v4') do
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'root' }
+      it { should be_mode '644' }
+    end
   end
 
   # always drop everything that isnt whitelisted
