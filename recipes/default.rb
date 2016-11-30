@@ -55,7 +55,20 @@ template 'create iptables.rules' do
     action   :create
 end
 
+file '/etc/cron.d/iptables' do
+    content "@reboot root iptables-restore < #{node['iptables']['rule_file']}"
+    group   'root'
+    owner   'root'
+    mode    0644
+    backup  false
+    action  :create
+end
+
 execute 'import rules' do
     command "sudo iptables-restore < #{node['iptables']['rule_file']}"
     action  :run
+end
+
+service node['iptables']['service'] do
+    action [:enable, :start]
 end
