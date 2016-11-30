@@ -6,15 +6,16 @@ describe 'redis::default' do
   end
 
   describe command('iptables --version') do
-    if os[:release] == '14.04'
-      its(:stdout) { should match /1.4.21/ }
-    end
-    if os[:release] == '16.04'
-      its(:stdout) { should match /1.6.0/ }
-    end
+    its(:stdout) { should match /1.(4|6).*/ }
   end
 
-  describe file('/etc/iptables/rules.v4') do
+  describe file('/etc/sysconfig/iptables'), :if => os[:platform_family] == 'rhel' do
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should be_mode '644' }
+  end
+
+  describe file('/etc/iptables/rules'), :if => os[:platform_family] == 'debian' do
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
     it { should be_mode '644' }

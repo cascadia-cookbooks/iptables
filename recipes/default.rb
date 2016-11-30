@@ -25,10 +25,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-packages = node['iptables']['packages']
-packages.each do |p|
+node['iptables']['packages'].each do |p|
     package p do
-        action :install
+        # NOTE: upgrade whenever possible
+        action :upgrade
     end
 end
 
@@ -37,8 +37,15 @@ rules = node['iptables']['rules']
 # ourselves from being locked out of ssh access
 Chef::Application.fatal!("No iptable rules set, aborting Chef run to prohibit lockout.") unless rules && rules != ''
 
+directory '/etc/iptables/' do
+    user   'root'
+    group  'root'
+    mode   0755
+    action :create
+end
+
 template 'create iptables.rules' do
-    path     '/etc/iptables/rules.v4'
+    path     node['iptables']['rule_file']
     source   'iptables.rules.erb'
     cookbook 'cop_iptables'
     group    'root'
@@ -49,7 +56,6 @@ template 'create iptables.rules' do
 end
 
 execute 'import rules' do
-    subscribes :run, 'template[create iptables.rules]', :immediately
-    command    'sudo iptables-restore < /etc/iptables/rules.v4'
-    action     :nothing
+    command "sudo iptables-restore < #{node['iptables']['rule_file']}"
+    action  :run
 end
