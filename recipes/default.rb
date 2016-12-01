@@ -25,14 +25,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-case node['platform_family']
-when 'fedora'
-    # NOTE: workaround for lack of Chef DNF provider on fedora >= 19
-    execute 'dnf install -y yum' do
-        command 'dnf install -y yum'
-        only_if 'test -f /usr/bin/dnf'
-        creates '/usr/bin/yum-deprecated'
-    end
+directory '/etc/iptables/' do
+    user   'root'
+    group  'root'
+    mode   0755
+    action :create
+    not_if node['platform_family'] == 'rhel'
 end
 
 node['iptables']['packages'].each do |p|
