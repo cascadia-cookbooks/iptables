@@ -30,7 +30,7 @@ directory '/etc/iptables/' do
     group  'root'
     mode   0755
     action :create
-    not_if node['platform_family'] == 'rhel'
+    not_if { node['platform_family'] == 'rhel' }
 end
 
 node['iptables']['packages'].each do |p|
